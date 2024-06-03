@@ -9,6 +9,10 @@ resource "aws_subnet" "Public-2A" {
   vpc_id            = aws_vpc.MyVPC.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-2a"
+  tags = {
+    Name        = "Public-2A"
+    Description = "Public Subnet in us-east-2a"
+  }
 }
 
 # create public subnet in us-east-2b
@@ -16,6 +20,10 @@ resource "aws_subnet" "Public-2B" {
   vpc_id            = aws_vpc.MyVPC.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "us-east-2b"
+  tags = {
+    Name        = "Public-2B"
+    Description = "Public Subnet in us-east-2b"
+  }
 }
 
 
@@ -24,6 +32,10 @@ resource "aws_subnet" "Private-2A" {
   vpc_id            = aws_vpc.MyVPC.id
   cidr_block        = "10.0.3.0/24"
   availability_zone = "us-east-2a"
+  tags = {
+    Name        = "Private-2A"
+    Description = "Private Subnet in us-east-2a"
+  }
 }
 
 # create private subnet in us-east-2b
@@ -31,6 +43,10 @@ resource "aws_subnet" "Private-2B" {
   vpc_id            = aws_vpc.MyVPC.id
   cidr_block        = "10.0.4.0/24"
   availability_zone = "us-east-2b"
+  tags = {
+    Name        = "Private-2B"
+    Description = "Private Subnet in us-east-2b"
+  }
 }
 
 # create private route table
