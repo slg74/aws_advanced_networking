@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChatHistory">
+    <accountData>
+      <list>
+        <AccountData>
+          <accountId value="VXNlcjo3MDgwOQ==" />
+          <chats>
+            <list>
+              <chat>
+                <internalId value="00ab6502-c739-492f-97a2-a4d7055b1872" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-sonnet-20240229" />
+                    <provider value="Anthropic" />
+                    <title value="Claude 3 Sonnet" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="145ec724-64b9-4e26-b97b-77a56370036f" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-sonnet-20240229" />
+                    <provider value="Anthropic" />
+                    <title value="Claude 3 Sonnet" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="7ca33e18-e28b-4ee3-a1a8-beceabae3210" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-sonnet-20240229" />
+                    <provider value="Anthropic" />
+                    <title value="Claude 3 Sonnet" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="23d0e20e-edef-479e-9509-b3ac8f7a0c34" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-sonnet-20240229" />
+                    <provider value="Anthropic" />
+                    <title value="Claude 3 Sonnet" />
+                  </llm>
+                </llm>
+                <messages>
+                  <list>
+                    <message>
+                      <speaker value="HUMAN" />
+                      <text value="how would i create an aws_route_table resource in custom_vpc.tf and add the two subnets, Private-1A and Private-1B, listed in custom_vpc.tf? " />
+                    </message>
+                    <message>
+                      <speaker value="ASSISTANT" />
+                      <text value="To create an `aws_route_table` resource in `custom_vpc.tf` and associate the two private subnets `Private-1A` and `Private-1B` with it, you can follow these steps:&#10;&#10;1. First, create the `aws_route_table` resource block in `custom_vpc.tf`:&#10;&#10;```hcl&#10;resource &quot;aws_route_table&quot; &quot;private_route_table&quot; {&#10;  vpc_id = aws_vpc.custom_vpc.id&#10;&#10;  tags = {&#10;    Name = &quot;Private Route Table&quot;&#10;  }&#10;}&#10;```&#10;&#10;This will create a new route table named &quot;Private Route Table&quot; within the custom VPC.&#10;&#10;2. Next, associate the two private subnets with the route table using the `aws_route_table_association` resource:&#10;&#10;```hcl&#10;resource &quot;aws_route_table_association&quot; &quot;private_1a&quot; {&#10;  subnet_id      = aws_subnet.private_1a.id&#10;  route_table_id = aws_route_table.private_route_table.id&#10;}&#10;&#10;resource &quot;aws_route_table_association&quot; &quot;private_1b&quot; {&#10;  subnet_id      = aws_subnet.private_1b.id&#10;  route_table_id = aws_route_table.private_route_table.id&#10;}&#10;```&#10;&#10;Here, we're creating two `aws_route_table_association` resources, one for each private subnet. The `subnet_id` is the ID of the respective private subnet (`aws_subnet.private_1a.id` and `aws_subnet.private_1b.id`), and the `route_table_id` is the ID of the route table we created earlier (`aws_route_table.private_route_table.id`).&#10;&#10;Make sure to replace `aws_subnet.private_1a` and `aws_subnet.private_1b` with the actual resource names you have defined in `custom_vpc.tf` for the two private subnets.&#10;&#10;After applying these changes, the two private subnets `Private-1A` and `Private-1B` will be associated with the newly created &quot;Private Route Table&quot; within the custom VPC." />
+                    </message>
+                  </list>
+                </messages>
+                <updatedAt value="2024-06-03T10:24:55.069452" />
+              </chat>
+            </list>
+          </chats>
+          <defaultLlm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </defaultLlm>
+        </AccountData>
+      </list>
+    </accountData>
+  </component>
+</project>
