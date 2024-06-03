@@ -86,3 +86,32 @@ resource "aws_route" "IGW-Route" {
   depends_on             = [aws_internet_gateway.MyIGW]
   destination_cidr_block = "0.0.0.0/0"
 }
+
+# create EIP for NAT gateway in Public 2a & 2b
+resource "aws_eip" "nat_gateway_eip" {
+  domain = "vpc"
+  tags = {
+    Name        = "MyEIP"
+    Description = "EIP from Advanced Networking Hands on Lab"
+  }
+}
+
+
+# create NAT gateway in Public subnet 2a & 2b
+resource "aws_nat_gateway" "MyNAT" {
+  allocation_id = aws_eip.nat_gateway_eip.id
+  subnet_id     = aws_subnet.Public-2A.id
+  tags = {
+    Name        = "MyNAT"
+    Description = "NAT Gateway from Advanced Networking Hands on Lab"
+  }
+  depends_on = [aws_eip.nat_gateway_eip]
+}
+
+# add route to NAT gateway
+resource "aws_route" "NAT-Route" {
+  route_table_id         = aws_route_table.Private-RT.id
+  nat_gateway_id         = aws_nat_gateway.MyNAT.id
+  destination_cidr_block = "0.0.0.0/0"
+  depends_on             = [aws_nat_gateway.MyNAT]
+}
