@@ -78,3 +78,11 @@ resource "aws_internet_gateway" "MyIGW" {
     Description = "IGW from Advanced Networking Hands on Lab"
   }
 }
+
+# add IGW route to main route table
+resource "aws_route" "IGW-Route" {
+  route_table_id         = aws_vpc.MyVPC.main_route_table_id
+  gateway_id             = aws_internet_gateway.MyIGW.id
+  depends_on             = [aws_internet_gateway.MyIGW]
+  destination_cidr_block = "0.0.0.0/0"
+}
