@@ -158,12 +158,20 @@ resource "aws_security_group_rule" "NAT-SG-Outbound" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+# add NAT gateway route to private route table
+resource "aws_route" "NATGW-Route" {
+  route_table_id         = aws_route_table.Private-RT.id
+  nat_gateway_id         = aws_nat_gateway.MyNATGW.id
+  destination_cidr_block = "0.0.0.0/0"
+}
+
 # create ec2 instance in routable public subnet 2a
 resource "aws_instance" "MyInstance1" {
-  ami             = "ami-0c9921088121ad00b"
-  instance_type   = "t2.micro"
-  subnet_id       = aws_subnet.Public-2A.id
-  security_groups = [aws_security_group.Public-SG.id]
+  ami                         = "ami-0c9921088121ad00b"
+  instance_type               = "t2.micro"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.Public-2A.id
+  security_groups             = [aws_security_group.Public-SG.id]
 
   user_data = <<-EOF
 #!/bin/bash
@@ -181,10 +189,11 @@ EOF
 
 # create ec2 instance in public subnet 2b
 resource "aws_instance" "MyInstance2" {
-  ami             = "ami-0c9921088121ad00b"
-  instance_type   = "t2.micro"
-  subnet_id       = aws_subnet.Public-2B.id
-  security_groups = [aws_security_group.Public-SG.id]
+  ami                         = "ami-0c9921088121ad00b"
+  instance_type               = "t2.micro"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.Public-2B.id
+  security_groups             = [aws_security_group.Public-SG.id]
 
   user_data = <<-EOF
 #!/bin/bash
