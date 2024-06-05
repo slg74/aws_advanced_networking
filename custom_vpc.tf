@@ -137,16 +137,9 @@ resource "aws_nat_gateway" "MyNATGW" {
 resource "aws_security_group" "NAT-SG" {
   name   = "NAT-SG"
   vpc_id = aws_vpc.MyVPC.id
-
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
-# allow inbound traffic on the NAT SG
+# allow inbound traffic via NAT SG
 resource "aws_security_group_rule" "NAT-SG-Inbound" {
   type              = "ingress"
   from_port         = 0
@@ -154,10 +147,9 @@ resource "aws_security_group_rule" "NAT-SG-Inbound" {
   protocol          = "-1"
   security_group_id = aws_security_group.NAT-SG.id
   cidr_blocks       = ["0.0.0.0/0"]
-
 }
 
-# allow outbound traffic on the NAT SG
+# allow outbound traffic via NAT SG
 resource "aws_security_group_rule" "NAT-SG-Outbound" {
   type              = "egress"
   from_port         = 0
