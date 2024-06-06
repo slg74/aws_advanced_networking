@@ -99,6 +99,13 @@ resource "aws_security_group" "Public-SG" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -179,7 +186,9 @@ yum update -y
 yum install -y httpd
 systemctl start httpd
 systemctl enable httpd
-echo "<h1>Hello, World!</h1>" > /var/www/html/index.html
+INTERFACE=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)
+SUBNET_ID=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$INTERFACE/subnet-id)
+echo "<center><h1>Instance 2 in Subnet $SUBNET_ID</h1></center>" > /var/www/html/index.html
 EOF
 
   tags = {
@@ -201,10 +210,86 @@ yum update -y
 yum install -y httpd
 systemctl start httpd
 systemctl enable httpd
-echo "<h1>Hello, World!</h1>" > /var/www/html/index.html
+INTERFACE=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)
+SUBNET_ID=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$INTERFACE/subnet-id)
+echo "<center><h1>Instance 2 in Subnet $SUBNET_ID</h1></center>" > /var/www/html/index.html
 EOF
 
   tags = {
     Name = "ec2_2"
+  }
+}
+
+# security group for private subnet
+resource "aws_security_group" "Private-SG" {
+  name   = "Private-SG"
+  vpc_id = aws_vpc.MyVPC.id
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# create ec2 instance in private subnet 2a
+resource "aws_instance" "MyInstance_Private_2A" {
+  ami                         = "ami-0c9921088121ad00b"
+  instance_type               = "t2.micro"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.Private-2A.id
+  security_groups             = [aws_security_group.Private-SG.id]
+
+  user_data = <<-EOF
+#!/bin/bash
+yum update -y
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+INTERFACE=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)
+SUBNET_ID=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$INTERFACE/subnet-id)
+echo "<center><h1>Instance 2 in Subnet $SUBNET_ID</h1></center>" > /var/www/html/index.html
+EOF
+
+  tags = {
+    Name = "ec2_Private_2A"
+  }
+}
+
+# create ec2 instance in private subnet 2b
+resource "aws_instance" "MyInstance_Private_2B" {
+  ami                         = "ami-0c9921088121ad00b"
+  instance_type               = "t2.micro"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.Private-2B.id
+  security_groups             = [aws_security_group.Private-SG.id]
+
+  user_data = <<-EOF
+#!/bin/bash
+yum update -y
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+INTERFACE=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)
+SUBNET_ID=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$INTERFACE/subnet-id)
+echo "<center><h1>Instance 2 in Subnet $SUBNET_ID</h1></center>" > /var/www/html/index.html
+EOF
+
+  tags = {
+    Name = "ec2_Private_2B"
   }
 }
