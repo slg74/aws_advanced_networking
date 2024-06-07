@@ -295,11 +295,11 @@ EOF
 }
 
 # create an S3 bucket
-resource "aws_s3_bucket" "MyS3Bucket" {
-  bucket = "s3-bucket-pulumi-0000000000000000"
+resource "aws_s3_bucket" "MyS3Bucket1" {
+  bucket = "s3-bucket-pulumi-0000000000000001"
 }
 
 # create an S3 bucket
-resource "aws_s3_bucket" "MyS3Bucket" {
-  bucket = "s3-bucket-pulumi-0000000000000001"
+resource "aws_s3_bucket" "MyS3Bucket2" {
+  bucket = "s3-bucket-pulumi-0000000000000002"
 }
