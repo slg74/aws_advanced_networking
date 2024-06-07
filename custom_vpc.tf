@@ -296,23 +296,10 @@ EOF
 
 # create an S3 bucket
 resource "aws_s3_bucket" "MyS3Bucket" {
-  bucket = "my-s3-bucket"
+  bucket = "s3-bucket-pulumi-0000000000000000"
 }
 
-# create an S3 bucket policy
-resource "aws_s3_bucket_policy" "MyS3BucketPolicy" {
-  bucket = aws_s3_bucket.MyS3Bucket.bucket
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "arn:aws:iam::905418012357:user/admin_user_pulumi",
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::my-s3-bucket/*"
-    }
-  ]
-}
-  EOF
+# create an S3 bucket
+resource "aws_s3_bucket" "MyS3Bucket" {
+  bucket = "s3-bucket-pulumi-0000000000000001"
 }
