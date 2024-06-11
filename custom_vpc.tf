@@ -124,10 +124,10 @@ resource "aws_security_group" "example_sg" {
   }
 }
 
-# Create 5 EC2 instances with Elastic IPs in the private subnet, to later be managed with Ansible
+# Create 4 EC2 instances with Elastic IPs in the private subnet, to later be managed with Ansible
 resource "aws_instance" "example" {
-  count                  = 5
-  ami                    = "ami-0cff7528ff583bf9a" # Amazon Linux 2 AMI (HVM), SSD Volume Type
+  count                  = 4
+  ami                    = "ami-0c9921088121ad00b"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.private_subnet.id
   vpc_security_group_ids = [aws_security_group.example_sg.id]
@@ -141,7 +141,7 @@ resource "aws_instance" "example" {
 
 # Create Elastic IPs for the EC2 instances
 resource "aws_eip" "example_eip_instances" {
-  count = 5
+  count = 4
 
   instance                  = aws_instance.example[count.index].id
   associate_with_private_ip = aws_instance.example[count.index].private_ip
