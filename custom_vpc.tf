@@ -126,11 +126,12 @@ resource "aws_security_group" "example_sg" {
 
 # Create 4 EC2 instances with Elastic IPs in the private subnet, to later be managed with Ansible
 resource "aws_instance" "example" {
-  count                  = 4
+  count                  = 3
   ami                    = "ami-0c9921088121ad00b"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.private_subnet.id
   vpc_security_group_ids = [aws_security_group.example_sg.id]
+  key_name               = "ansible_tf_keypair"
 
   associate_public_ip_address = true
 
@@ -141,7 +142,7 @@ resource "aws_instance" "example" {
 
 # Create Elastic IPs for the EC2 instances
 resource "aws_eip" "example_eip_instances" {
-  count = 4
+  count = 3
 
   instance                  = aws_instance.example[count.index].id
   associate_with_private_ip = aws_instance.example[count.index].private_ip
@@ -154,9 +155,4 @@ resource "aws_eip" "example_eip_instances" {
 output "instance_elastic_ips" {
   description = "Elastic IP addresses of the EC2 instances"
   value       = aws_eip.example_eip_instances[*].public_ip
-}
-
-# create AWS key pair
-resource "aws_key_pair" "example" {
-  key_name   = "ansible_tf_keypair"
 }
