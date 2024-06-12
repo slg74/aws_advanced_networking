@@ -174,11 +174,13 @@ resource "aws_route" "NATGW-Route" {
 
 # create ec2 instance in routable public subnet 2a
 resource "aws_instance" "MyInstance1" {
+  count                       = 2
   ami                         = "ami-0c9921088121ad00b"
   instance_type               = "t2.micro"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.Public-2A.id
   security_groups             = [aws_security_group.Public-SG.id]
+  key_name                    = "ansible_tf_keypair"
 
   user_data = <<-EOF
 #!/bin/bash
@@ -192,17 +194,20 @@ echo "<center><h1>Instance 2 in Subnet $SUBNET_ID</h1></center>" > /var/www/html
 EOF
 
   tags = {
-    Name = "ec2_1"
+    Name = "public-instance-${count.index}"
   }
+
 }
 
 # create ec2 instance in public subnet 2b
 resource "aws_instance" "MyInstance2" {
+  count                       = 2
   ami                         = "ami-0c9921088121ad00b"
   instance_type               = "t2.micro"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.Public-2B.id
   security_groups             = [aws_security_group.Public-SG.id]
+  key_name                    = "ansible_tf_keypair"
 
   user_data = <<-EOF
 #!/bin/bash
@@ -270,7 +275,6 @@ EOF
   tags = {
     Name = "private-instance-${count.index}"
   }
-
 }
 
 # create ec2 instance in private subnet 2b
@@ -295,7 +299,7 @@ echo "<center><h1>Instance 2 in Subnet $SUBNET_ID</h1></center>" > /var/www/html
 EOF
 
   tags = {
-    Name = "ec2_Private_2B"
+    Name = "private-instance-${count.index}"
   }
 }
 
