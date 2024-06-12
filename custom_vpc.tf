@@ -155,3 +155,8 @@ output "instance_elastic_ips" {
   description = "Elastic IP addresses of the EC2 instances"
   value       = aws_eip.example_eip_instances[*].public_ip
 }
+
+# create AWS key pair
+resource "aws_key_pair" "example" {
+  key_name   = "ansible_tf_keypair"
+}
